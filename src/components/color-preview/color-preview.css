@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+a:link {
+  color: var(--primary);
+}
+
+a:visited {
+  color: var(--secondary);
+}

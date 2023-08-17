@@ -17,6 +17,11 @@ export namespace Components {
         "label": string;
         "uuid": string;
     }
+    interface ColorPreview {
+        "backgroundColorVar": string;
+        "colorVar": string;
+        "elements": HTMLElement[];
+    }
 }
 export interface AddColorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -45,10 +50,17 @@ declare global {
         prototype: HTMLColorPickerElement;
         new (): HTMLColorPickerElement;
     };
+    interface HTMLColorPreviewElement extends Components.ColorPreview, HTMLStencilElement {
+    }
+    var HTMLColorPreviewElement: {
+        prototype: HTMLColorPreviewElement;
+        new (): HTMLColorPreviewElement;
+    };
     interface HTMLElementTagNameMap {
         "add-color": HTMLAddColorElement;
         "app-root": HTMLAppRootElement;
         "color-picker": HTMLColorPickerElement;
+        "color-preview": HTMLColorPreviewElement;
     }
 }
 declare namespace LocalJSX {
@@ -63,10 +75,16 @@ declare namespace LocalJSX {
         "onColorChanged"?: (event: ColorPickerCustomEvent<Color>) => void;
         "uuid"?: string;
     }
+    interface ColorPreview {
+        "backgroundColorVar": string;
+        "colorVar": string;
+        "elements": HTMLElement[];
+    }
     interface IntrinsicElements {
         "add-color": AddColor;
         "app-root": AppRoot;
         "color-picker": ColorPicker;
+        "color-preview": ColorPreview;
     }
 }
 export { LocalJSX as JSX };
@@ -76,6 +94,7 @@ declare module "@stencil/core" {
             "add-color": LocalJSX.AddColor & JSXBase.HTMLAttributes<HTMLAddColorElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "color-picker": LocalJSX.ColorPicker & JSXBase.HTMLAttributes<HTMLColorPickerElement>;
+            "color-preview": LocalJSX.ColorPreview & JSXBase.HTMLAttributes<HTMLColorPreviewElement>;
         }
     }
 }

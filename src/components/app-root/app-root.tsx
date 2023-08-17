@@ -12,20 +12,61 @@ export class AppRoot {
 
   @Listen('colorSubmitted')
   onColorAdded(event: CustomEvent<string>) {
-    this.colors = [...this.colors, { uuid: uuid(), color: '', label: event.detail }];
+    this.colors = [
+      ...this.colors,
+      { uuid: uuid(), color: '', label: event.detail },
+    ];
   }
 
   @Listen('colorChanged')
   onColorChanged(event: CustomEvent<Color>) {
-    const index = this.colors.findIndex(color => color.uuid === event.detail.uuid);
+    const index = this.colors.findIndex(
+      color => color.uuid === event.detail.uuid,
+    );
     if (index === -1) {
       return;
     }
-    this.colors = [...this.colors.slice(0, index), event.detail, ...this.colors.slice(index + 1)];
+    this.colors = [
+      ...this.colors.slice(0, index),
+      event.detail,
+      ...this.colors.slice(index + 1),
+    ];
+  }
+
+  getColors() {
+    return this.colors.map(({ color, label }) => [
+      `--${label.toLocaleLowerCase()}`,
+      `${color}`,
+    ]);
   }
 
   getOutput() {
-    return `:root {\n  ${this.colors.map(({ color, label }) => `--${label.toLocaleLowerCase()}: ${color};`).join('\n  ')}\n}`;
+    return `:root {\n  ${this.getColors()
+      .map(o => o.join(': '))
+      .join(';\n  ')}\n}`;
+  }
+
+  getElements() {
+    return this.colors.map(({ label }) => (
+      <div>
+        <span
+          class="label"
+          style={{
+            backgroundColor: `var(--${label.toLocaleLowerCase()})`,
+            display: 'inline-block',
+            textAlign: 'center',
+            width: '100px',
+          }}
+        >
+          {label}
+        </span>
+        <span> | </span>
+        <span
+          class="value"
+          style={{ color: `var(--${label.toLocaleLowerCase()})` }}
+        >{`var(--${label.toLocaleLowerCase()})`}</span>
+      </div>
+    ));
   }
 
   render() {
@@ -42,16 +83,27 @@ export class AppRoot {
         <pre>
           <code>{this.getOutput()}</code>
         </pre>
+        <color-preview
+          backgroundColorVar="--background"
+          colorVar="--foreground"
+          elements={this.getElements()}
+          style={Object.fromEntries(this.getColors())}
+        />
       </div>
     );
   }
 
   @Watch('colors')
   onColors() {
-    localStorage.setItem('css-variable-theme-builder:colors', JSON.stringify(this.colors));
+    localStorage.setItem(
+      'css-variable-theme-builder:colors',
+      JSON.stringify(this.colors),
+    );
   }
 
   componentWillLoad() {
-    this.colors = JSON.parse(localStorage.getItem('css-variable-theme-builder:colors') || '[]');
+    this.colors = JSON.parse(
+      localStorage.getItem('css-variable-theme-builder:colors') || '[]',
+    ).filter(({ label }) => !!label);
   }
 }

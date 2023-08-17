@@ -2,7 +2,7 @@
   "name": "css-variable-theme-builder",
   "private": true,
   "version": "0.0.1",
-  "description": "Stencil App Starter",
+  "description": "CSS variable theme builder",
   "scripts": {
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
