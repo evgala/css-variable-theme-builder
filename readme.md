@@ -6,7 +6,7 @@ It does exactly what it says on the tin.
 
 - [x] Add a preview component
 - [ ] improve the color picker (inline?)
-- [ ] automatic contrast color
+- [x] automatic contrast color
 - [ ] improve the preview component
 - [ ] Add presets with a collection of variables
 - [ ] Add a secondary color set

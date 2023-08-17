@@ -1,6 +1,7 @@
 import { Component, h, Listen, State, Watch } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
 import type { Color } from '../../types';
+import getContrastColor from '../../fns/getContrastColor';
 
 @Component({
   tag: 'app-root',
@@ -47,12 +48,13 @@ export class AppRoot {
   }
 
   getElements() {
-    return this.colors.map(({ label }) => (
+    return this.colors.map(({ color, label }) => (
       <div>
         <span
           class="label"
           style={{
             backgroundColor: `var(--${label.toLocaleLowerCase()})`,
+            color: getContrastColor(color),
             display: 'inline-block',
             textAlign: 'center',
             width: '100px',
@@ -63,7 +65,10 @@ export class AppRoot {
         <span> | </span>
         <span
           class="value"
-          style={{ color: `var(--${label.toLocaleLowerCase()})` }}
+          style={{
+            backgroundColor: getContrastColor(color),
+            color: `var(--${label.toLocaleLowerCase()})`,
+          }}
         >{`var(--${label.toLocaleLowerCase()})`}</span>
       </div>
     ));
